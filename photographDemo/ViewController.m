@@ -17,8 +17,7 @@
 //AVCaptureDeviceInput 代表输入设备，他使用AVCaptureDevice 来初始化
 @property(nonatomic)AVCaptureDeviceInput *input;
 
-//设置输出类型为Metadata，因为这种输出类型中可以设置扫描的类型，譬如二维码
-//当启动摄像头开始捕获输入时，如果输入中包含二维码，就会产生输出
+//当启动摄像头开始捕获输入
 @property(nonatomic)AVCaptureMetadataOutput *output;
 
 @property (nonatomic)AVCaptureStillImageOutput *ImageOutPut;
