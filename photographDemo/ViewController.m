@@ -10,7 +10,6 @@
 #define kScreenHeight kScreenBounds.size.height*1.0
 #import "ViewController.h"
 #import <AVFoundation/AVFoundation.h>
-#import <CoreText/CoreText.h>
 @interface ViewController ()<AVCaptureMetadataOutputObjectsDelegate,UIAlertViewDelegate>
 //捕获设备，通常是前置摄像头，后置摄像头，麦克风（音频输入）
 @property(nonatomic)AVCaptureDevice *device;
