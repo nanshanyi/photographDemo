@@ -260,13 +260,38 @@
         NSData * imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
         self.image = [UIImage imageWithData:imageData];
         [self.session stopRunning];
-        
+        [self saveImageToPhotoAlbum:self.image];
         self.imageView = [[UIImageView alloc]initWithFrame:self.previewLayer.frame];
         [self.view insertSubview:_imageView belowSubview:_PhotoButton];
         self.imageView.layer.masksToBounds = YES;
         self.imageView.image = _image;
         NSLog(@"image size = %@",NSStringFromCGSize(self.image.size));
     }];
+}
+#pragma - 保存至相册
+- (void)saveImageToPhotoAlbum:(UIImage*)savedImage
+{
+
+    UIImageWriteToSavedPhotosAlbum(savedImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+
+}
+// 指定回调方法
+
+- (void)image: (UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo
+
+{
+    NSString *msg = nil ;
+    if(error != NULL){
+        msg = @"保存图片失败" ;
+    }else{
+        msg = @"保存图片成功" ;
+    }
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"保存图片结果提示"
+                                            message:msg
+                                            delegate:self
+                                          cancelButtonTitle:@"确定"
+                                          otherButtonTitles:nil];
+    [alert show];
 }
 -(void)cancle{
     [self.imageView removeFromSuperview];
@@ -277,6 +302,7 @@
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     if (authStatus == AVAuthorizationStatusDenied) {
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"请打开相机权限" message:@"设置-隐私-相机" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+        alertView.tag = 100;
         [alertView show];
         return NO;
     }
@@ -286,7 +312,7 @@
     return YES;
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 0) {
+    if (buttonIndex == 0 && alertView.tag == 100) {
         
         NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
         
